@@ -11,12 +11,12 @@ from PIL import Image
 import numpy as np
 import pybullet as p
 import pybullet_data
-import gym
+import gymnasium
 from gym_pybullet_drones.utils.enums import DroneModel, Physics, ImageType
 
 
 
-class BaseAviary(gym.Env):
+class BaseAviary(gymnasium.Env):
     """Base class for "drone aviary" Gym environments."""
 
     metadata = {'render.modes': ['human']}

@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 
 from gym_pybullet_drones.envs.BaseAviary import BaseAviary
 from gym_pybullet_drones.utils.enums import DroneModel, Physics, ImageType
@@ -130,7 +130,7 @@ class VisionAviary(BaseAviary):
                                                                    high=100,
                                                                    shape=(self.IMG_RES[1],
                                                                    self.IMG_RES[0]),
-                                                                   dtype=np.int
+                                                                   dtype=np.int32
                                                                    )
                                                  }) for i in range(self.NUM_DRONES)})
     
