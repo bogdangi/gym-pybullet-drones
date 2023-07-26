@@ -29,7 +29,8 @@ import numpy as np
 import gym
 import torch
 from stable_baselines3.common.env_checker import check_env
-from stable_baselines3.common.cmd_util import make_vec_env # Module cmd_util will be renamed to env_util https://github.com/DLR-RM/stable-baselines3/pull/197
+#from stable_baselines3.common.cmd_util import make_vec_env # Module cmd_util will be renamed to env_util https://github.com/DLR-RM/stable-baselines3/pull/197
+from stable_baselines3.common.env_util import make_vec_env # Module cmd_util will be renamed to env_util https://github.com/DLR-RM/stable-baselines3/pull/197
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecTransposeImage
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3 import A2C
@@ -71,6 +72,7 @@ def run(
     act=DEFAULT_ACT,
     cpu=DEFAULT_CPU,
     steps=DEFAULT_STEPS,
+    load_model_path=None,
     output_folder=DEFAULT_OUTPUT_FOLDER
 ):
 
@@ -205,6 +207,9 @@ def run(
                                                                 verbose=1
                                                                 )
 
+    if load_model_path:
+        model.load(path=load_model_path)
+
     #### Create eveluation environment #########################
     if obs == ObservationType.KIN: 
         eval_env = gym.make(env_name,
@@ -278,6 +283,7 @@ if __name__ == "__main__":
     parser.add_argument('--cpu',        default=DEFAULT_CPU,          type=int,                                                                  help='Number of training environments (default: 1)', metavar='')        
     parser.add_argument('--steps',        default=DEFAULT_STEPS,          type=int,                                                                  help='Number of training time steps (default: 35000)', metavar='')        
     parser.add_argument('--output_folder',     default=DEFAULT_OUTPUT_FOLDER, type=str,           help='Folder where to save logs (default: "results")', metavar='')
+    parser.add_argument('--load_model_path',     default=None, type=str,           help='Load model path', metavar='')
     ARGS = parser.parse_args()
 
     run(**vars(ARGS))

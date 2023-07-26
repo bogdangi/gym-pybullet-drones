@@ -130,6 +130,8 @@ def run(exp, gui=DEFAULT_GUI, plot=DEFAULT_PLOT, output_folder=DEFAULT_OUTPUT_FO
     #     print(data['results'])
     #     print(data['ep_lengths'])
 
+    import pdb;pdb.set_trace()
+
 if __name__ == "__main__":
     #### Define and parse (optional) arguments for the script ##
     parser = argparse.ArgumentParser(description='Single agent reinforcement learning example script using TakeoffAviary')
