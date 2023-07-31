@@ -119,7 +119,7 @@ def run(exp, gui=DEFAULT_GUI, plot=DEFAULT_PLOT, output_folder=DEFAULT_OUTPUT_FO
         sync(np.floor(i*test_env.AGGR_PHY_STEPS), start, test_env.TIMESTEP)
         # if done: obs = test_env.reset() # OPTIONAL EPISODE HALT
     test_env.close()
-    logger.save_as_csv("sa") # Optional CSV save
+    #logger.save_as_csv("sa") # Optional CSV save
     if plot:
         logger.plot()
 
