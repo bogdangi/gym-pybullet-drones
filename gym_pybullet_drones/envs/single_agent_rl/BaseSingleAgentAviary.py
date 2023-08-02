@@ -45,7 +45,8 @@ class BaseSingleAgentAviary(BaseAviary):
                  gui=False,
                  record=False, 
                  obs: ObservationType=ObservationType.KIN,
-                 act: ActionType=ActionType.RPM
+                 act: ActionType=ActionType.RPM,
+                 output_folder='results'
                  ):
         """Initialization of a generic single agent RL environment.
 
@@ -115,6 +116,7 @@ class BaseSingleAgentAviary(BaseAviary):
                          aggregate_phy_steps=aggregate_phy_steps,
                          gui=gui,
                          record=record, 
+                         output_folder=output_folder, 
                          obstacles=True, # Add obstacles for RGB observations and/or FlyThruGate
                          user_debug_gui=False, # Remove of RPM sliders from all single agent learning aviaries
                          vision_attributes=vision_attributes,

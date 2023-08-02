@@ -75,7 +75,6 @@ def run(
     load_model_path=None,
     output_folder=DEFAULT_OUTPUT_FOLDER
 ):
-
     #### Save directory ########################################
     filename = os.path.join(output_folder, 'save-'+env+'-'+algo+'-'+obs.value+'-'+act.value+'-'+datetime.now().strftime("%m.%d.%Y_%H.%M.%S"))
     if not os.path.exists(filename):
@@ -137,78 +136,104 @@ def run(
     print("[INFO] Observation space:", train_env.observation_space)
     # check_env(train_env, warn=True, skip_render_check=True)
     
-    #### On-policy algorithms ##################################
-    onpolicy_kwargs = dict(activation_fn=torch.nn.ReLU,
-                           net_arch=[512, 512, dict(vf=[256, 128], pi=[256, 128])]
-                           ) # or None
-    if algo == 'a2c':
-        model = A2C(a2cppoMlpPolicy,
-                    train_env,
-                    policy_kwargs=onpolicy_kwargs,
-                    tensorboard_log=filename+'/tb/',
-                    verbose=1
-                    ) if obs == ObservationType.KIN else A2C(a2cppoCnnPolicy,
-                                                                  train_env,
-                                                                  policy_kwargs=onpolicy_kwargs,
-                                                                  tensorboard_log=filename+'/tb/',
-                                                                  verbose=1
-                                                                  )
-    if algo == 'ppo':
-        model = PPO(a2cppoMlpPolicy,
-                    train_env,
-                    policy_kwargs=onpolicy_kwargs,
-                    tensorboard_log=filename+'/tb/',
-                    verbose=1
-                    ) if obs == ObservationType.KIN else PPO(a2cppoCnnPolicy,
-                                                                  train_env,
-                                                                  policy_kwargs=onpolicy_kwargs,
-                                                                  tensorboard_log=filename+'/tb/',
-                                                                  verbose=1
-                                                                  )
-
-    #### Off-policy algorithms #################################
-    offpolicy_kwargs = dict(activation_fn=torch.nn.ReLU,
-                            net_arch=[512, 512, 256, 128]
-                            ) # or None # or dict(net_arch=dict(qf=[256, 128, 64, 32], pi=[256, 128, 64, 32]))
-    if algo == 'sac':
-        model = SAC(sacMlpPolicy,
-                    train_env,
-                    policy_kwargs=offpolicy_kwargs,
-                    tensorboard_log=filename+'/tb/',
-                    verbose=1
-                    ) if obs==ObservationType.KIN else SAC(sacCnnPolicy,
-                                                                train_env,
-                                                                policy_kwargs=offpolicy_kwargs,
-                                                                tensorboard_log=filename+'/tb/',
-                                                                verbose=1
-                                                                )
-    if algo == 'td3':
-        model = TD3(td3ddpgMlpPolicy,
-                    train_env,
-                    policy_kwargs=offpolicy_kwargs,
-                    tensorboard_log=filename+'/tb/',
-                    verbose=1
-                    ) if obs==ObservationType.KIN else TD3(td3ddpgCnnPolicy,
-                                                                train_env,
-                                                                policy_kwargs=offpolicy_kwargs,
-                                                                tensorboard_log=filename+'/tb/',
-                                                                verbose=1
-                                                                )
-    if algo == 'ddpg':
-        model = DDPG(td3ddpgMlpPolicy,
-                    train_env,
-                    policy_kwargs=offpolicy_kwargs,
-                    tensorboard_log=filename+'/tb/',
-                    verbose=1
-                    ) if obs==ObservationType.KIN else DDPG(td3ddpgCnnPolicy,
-                                                                train_env,
-                                                                policy_kwargs=offpolicy_kwargs,
-                                                                tensorboard_log=filename+'/tb/',
-                                                                verbose=1
-                                                                )
-
     if load_model_path:
-        model.load(path=load_model_path)
+        if algo == 'a2c':
+            model = A2C.load(
+                load_model_path, 
+                tensorboard_log=filename+'/tb/',
+            )
+        if algo == 'ppo':
+            model = PPO.load(
+                load_model_path, 
+                tensorboard_log=filename+'/tb/',
+            )
+        if algo == 'sac':
+            model = SAC.load(
+                load_model_path, 
+                tensorboard_log=filename+'/tb/',
+            )
+        if algo == 'td3':
+            model = TD3.load(
+                load_model_path, 
+                tensorboard_log=filename+'/tb/',
+            )
+        if algo == 'ddpg':
+            model = DDPG.load(
+                load_model_path, 
+                tensorboard_log=filename+'/tb/',
+            )
+        model.set_env(train_env)
+    else:
+        #### On-policy algorithms ##################################
+        onpolicy_kwargs = dict(activation_fn=torch.nn.ReLU,
+                               net_arch=[512, 512, dict(vf=[256, 128], pi=[256, 128])]
+                               ) # or None
+        if algo == 'a2c':
+            model = A2C(a2cppoMlpPolicy,
+                        train_env,
+                        policy_kwargs=onpolicy_kwargs,
+                        tensorboard_log=filename+'/tb/',
+                        verbose=1
+                        ) if obs == ObservationType.KIN else A2C(a2cppoCnnPolicy,
+                                                                      train_env,
+                                                                      policy_kwargs=onpolicy_kwargs,
+                                                                      tensorboard_log=filename+'/tb/',
+                                                                      verbose=1
+                                                                      )
+        if algo == 'ppo':
+            model = PPO(a2cppoMlpPolicy,
+                        train_env,
+                        policy_kwargs=onpolicy_kwargs,
+                        tensorboard_log=filename+'/tb/',
+                        verbose=1
+                        ) if obs == ObservationType.KIN else PPO(a2cppoCnnPolicy,
+                                                                      train_env,
+                                                                      policy_kwargs=onpolicy_kwargs,
+                                                                      tensorboard_log=filename+'/tb/',
+                                                                      verbose=1
+                                                                      )
+
+        #### Off-policy algorithms #################################
+        offpolicy_kwargs = dict(activation_fn=torch.nn.ReLU,
+                                net_arch=[512, 512, 256, 128]
+                                ) # or None # or dict(net_arch=dict(qf=[256, 128, 64, 32], pi=[256, 128, 64, 32]))
+        if algo == 'sac':
+            model = SAC(sacMlpPolicy,
+                        train_env,
+                        policy_kwargs=offpolicy_kwargs,
+                        tensorboard_log=filename+'/tb/',
+                        verbose=1
+                        ) if obs==ObservationType.KIN else SAC(sacCnnPolicy,
+                                                                    train_env,
+                                                                    policy_kwargs=offpolicy_kwargs,
+                                                                    tensorboard_log=filename+'/tb/',
+                                                                    verbose=1
+                                                                    )
+        if algo == 'td3':
+            model = TD3(td3ddpgMlpPolicy,
+                        train_env,
+                        policy_kwargs=offpolicy_kwargs,
+                        tensorboard_log=filename+'/tb/',
+                        verbose=1
+                        ) if obs==ObservationType.KIN else TD3(td3ddpgCnnPolicy,
+                                                                    train_env,
+                                                                    policy_kwargs=offpolicy_kwargs,
+                                                                    tensorboard_log=filename+'/tb/',
+                                                                    verbose=1
+                                                                    )
+        if algo == 'ddpg':
+            model = DDPG(td3ddpgMlpPolicy,
+                        train_env,
+                        policy_kwargs=offpolicy_kwargs,
+                        tensorboard_log=filename+'/tb/',
+                        verbose=1
+                        ) if obs==ObservationType.KIN else DDPG(td3ddpgCnnPolicy,
+                                                                    train_env,
+                                                                    policy_kwargs=offpolicy_kwargs,
+                                                                    tensorboard_log=filename+'/tb/',
+                                                                    verbose=1
+                                                                    )
+
 
     #### Create eveluation environment #########################
     if obs == ObservationType.KIN: 

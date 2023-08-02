@@ -83,6 +83,7 @@ def run(exp, gui=DEFAULT_GUI, plot=DEFAULT_PLOT, output_folder=DEFAULT_OUTPUT_FO
     eval_env = gym.make(env_name,
                         aggregate_phy_steps=shared_constants.AGGR_PHY_STEPS,
                         obs=OBS,
+                        output_folder=output_folder,
                         act=ACT
                         )
     mean_reward, std_reward = evaluate_policy(model,
@@ -96,6 +97,7 @@ def run(exp, gui=DEFAULT_GUI, plot=DEFAULT_PLOT, output_folder=DEFAULT_OUTPUT_FO
                         gui=gui,
                         record=record,
                         aggregate_phy_steps=shared_constants.AGGR_PHY_STEPS,
+                        output_folder=output_folder,
                         obs=OBS,
                         act=ACT
                         )
@@ -120,7 +122,7 @@ def run(exp, gui=DEFAULT_GUI, plot=DEFAULT_PLOT, output_folder=DEFAULT_OUTPUT_FO
         sync(np.floor(i*test_env.AGGR_PHY_STEPS), start, test_env.TIMESTEP)
         # if done: obs = test_env.reset() # OPTIONAL EPISODE HALT
     test_env.close()
-    #logger.save_as_csv("sa") # Optional CSV save
+    # logger.save_as_csv("sa") # Optional CSV save
     if plot:
         logger.plot()
 
@@ -129,8 +131,6 @@ def run(exp, gui=DEFAULT_GUI, plot=DEFAULT_PLOT, output_folder=DEFAULT_OUTPUT_FO
     #     print(data['timesteps'])
     #     print(data['results'])
     #     print(data['ep_lengths'])
-
-    import pdb;pdb.set_trace()
 
 if __name__ == "__main__":
     #### Define and parse (optional) arguments for the script ##

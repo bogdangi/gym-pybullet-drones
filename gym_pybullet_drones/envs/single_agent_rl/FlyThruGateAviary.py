@@ -22,7 +22,8 @@ class FlyThruGateAviary(BaseSingleAgentAviary):
                  gui=False,
                  record=False, 
                  obs: ObservationType=ObservationType.KIN,
-                 act: ActionType=ActionType.RPM
+                 act: ActionType=ActionType.RPM,
+                 output_folder='results'
                  ):
         """Initialization of a single agent RL environment.
 
@@ -60,6 +61,7 @@ class FlyThruGateAviary(BaseSingleAgentAviary):
                          aggregate_phy_steps=aggregate_phy_steps,
                          gui=gui,
                          record=record,
+                         output_folder=output_folder, 
                          obs=obs,
                          act=act
                          )
